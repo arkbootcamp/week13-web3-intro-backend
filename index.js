@@ -23,6 +23,10 @@ app.get('/users', userController.getUser)
 app.delete('/users/:id', userController.deleteUser)
 
 app.post('/products', productController.insertProduct)
+app.get('/products', productController.getAllProduct)
+app.put('/products/:id', productController.updateProduct)
+app.delete('/products/:id', productController.deteleProduct)
+app.get('/products/:id', productController.detailProduct)
 
 const PORT = 1234
 
