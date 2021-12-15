@@ -1,34 +1,50 @@
-
+require('dotenv').config()
 const express = require('express');
 const userController = require('./src/controllers/user')
 const commonMiddle = require('./src/middleware/common')
+const commonHelper = require('./src/helpers/common')
 const productController = require('./src/controllers/product')
+const productRoute = require('./src/routes/product')
+const userRoute = require('./src/routes/user')
+const morgan = require('morgan')
+const cors = require('cors')
+
+const PORT = 1234
 
 const app = express()
 
 // middleware
 // build in middleware to handle json
-app.use(express.json())
-app.use(commonMiddle.myConsole)
-
-// const biodata ={
-//   naem: 'risano',
-//   age: 17
+// app.use(cors())
+// var whitelist = ['http://127.0.0.1:5500', 'http://example2.com']
+// var corsOptions = {
+//   origin: function (origin, callback) {
+//     if (whitelist.indexOf(origin) !== -1) {
+//       callback(null, true)
+//     } else {
+//       callback(new Error('Not allowed by CORS'))
+//     }
+//   }
 // }
-// biodata.age
+app.use(cors())
+app.use(express.json())
+// parse application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: false }))
+
+app.use(commonMiddle.myConsole)
+// middleware login
+app.use(morgan('dev'))
+
 
 // routes
-app.post('/users', userController.insertUser)
-app.get('/users', userController.getUser)
-app.delete('/users/:id', userController.deleteUser)
+app.use('/users', userRoute)
 
-app.post('/products', productController.insertProduct)
-app.get('/products', productController.getAllProduct)
-app.put('/products/:id', productController.updateProduct)
-app.delete('/products/:id', productController.deteleProduct)
-app.get('/products/:id', productController.detailProduct)
+// method all kemudian di awali path /products 
+app.use('/products', productRoute)
 
-const PORT = 1234
+
+// handle url not found
+app.use(commonHelper.handleNotFount)
 
 app.listen(PORT, () => {
   console.log(`server starting on port ${PORT}`);

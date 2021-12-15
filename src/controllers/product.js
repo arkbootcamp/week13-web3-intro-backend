@@ -1,101 +1,126 @@
 const connection = require('../config/db')
-
-const insertProduct = (req, res, next)=>{
-  const { name, description, price, stock} = req.body
+const modelProduct = require('../models/product')
+const insertProduct = (req, res, next) => {
+  const { name, description, price, stock } = req.body
   const data = {
     name: name,
     description: description,
     price: price,
     stock: stock
   }
-  connection.query("INSERT INTO products set ?", data, (error, result)=>{
-    if(error){
-      res.json({
-        message: "data gagal di tambahkan"
-      })
-    }else{
+  modelProduct.insertProduct(data)
+    .then((result) => {
       res.json({
         result: result
       })
-    }
-  })
-}
-const getAllProduct = (req, res, next)=>{
-  connection.query("SELECT * FROM products", (error, result)=>{
-    if(error){
-      console.log(error);
+    })
+    .catch((err) => {
+      res.status(500)
       res.json({
-        message: "Internal Server Error"
+        statusCode: 500,
+        message: 'Internal Server Error'
       })
-    }else{
-      res.json({
-        result: result
-      })
-    }
-  })
+    })
 }
-const updateProduct = (req, res, next)=>{
-  const id = req.params.id
+const getAllProduct = async (req, res, next) => {
+  // modelProduct.getAllProduct()
+  // .then((result)=>{
+  //   res.json({
+  //     result: result
+  //   })
+  // })
+  // .catch((err)=>{
+  //   res.status(500)
+  //   res.json({
+  //     statusCode: 500,
+  //     message: 'Internal Server Error'
+  //   })
+  // })
 
-  const name = req.body.name
-  const description = req.body.description
-  const price = req.body.price
-  const stock = req.body.stock
-  
-  console.log(new Date());
-  const data = {
-    name: name,
-    description: description,
-    price: price,
-    stock: stock,
-    updated_at: new Date()
+  try {
+
+    const result = await modelProduct.getAllProduct()
+    res.json({
+      result: result
+    })
+  } catch (error) {
+    console.log(error);
+    res.status(500)
+    res.json({
+      statusCode: 500,
+      message: 'Internal Server Error'
+    })
+  }
+}
+const updateProduct = async (req, res, next) => {
+  try {
+    const id = req.params.id
+
+    const name = req.body.name
+    const description = req.body.description
+    const price = req.body.price
+    const stock = req.body.stock
+
+    console.log(new Date());
+    const data = {
+      name: name,
+      description: description,
+      price: price,
+      stock: stock,
+      updated_at: new Date()
+    }
+    const result = await modelProduct.updateProduct(data, id)
+    res.json({
+      result: result
+    })
+  } catch (error) {
+    console.log(error);
+    res.status(500)
+    res.json({
+      statusCode: 500,
+      message: 'Internal Server Error'
+    })
   }
 
-  connection.query("UPDATE products SET ? WHERE id = ?", [data, id], (error, result)=>{
-    if (error) {
-      console.log(error);
-      res.json({
-        message: "Internal Server Error"
-      })
-    } else {
-      res.json({
-        result: result
-      })
-    }
-  })
+
+
 }
-const deteleProduct = (req, res, next)=>{
-  const id = req.params.id
-  connection.query("DELETE FROM products WHERE id = ?", id, (error, result)=>{
-    if (error) {
-      console.log(error);
-      res.json({
-        message: "Internal Server Error"
-      })
-    } else {
-      res.json({
-        result: result
-      })
-    }
-  })
+const deteleProduct = async (req, res, next) => {
+  try {
+    const id = req.params.id
+    
+    const result = await modelProduct.deleteProduct(id)
+    res.json({
+      result: result
+    })
+
+  } catch (error) {
+    console.log(error);
+    res.status(500)
+    res.json({
+      statusCode: 500,
+      message: 'Internal Server Error'
+    })
+  }
+
+
 }
 
-const detailProduct = (req, res, next)=>{
-  const id = req.params.id
-  connection.query("SELECT * FROM products WHERE id = ?", id, (error, result)=>{
-    if (error) {
-      console.log(error);
-      res.json({
-        message: "Internal Server Error"
-      })
-    } else {
-      const resultDetail = result[0]
-      res.json({
-        result: resultDetail
-      })
-    }
-  })
-
+const detailProduct = async (req, res, next) => {
+  try {
+    const id = req.params.id
+    const result = await modelProduct.detailProduct(id)
+    res.json({
+      result: result
+    })
+  } catch (error) {
+    console.log(error);
+    res.status(500)
+    res.json({
+      statusCode: 500,
+      message: 'Internal Server Error'
+    })
+  }
 }
 module.exports = {
   insertProduct,

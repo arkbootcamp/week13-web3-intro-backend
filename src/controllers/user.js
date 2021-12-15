@@ -18,6 +18,7 @@ const insertUser = (req, res, next) => {
   // const username = req.body.username
   // const email = req.body.email
   // const id = req.body.id
+  // validasi bla
   const { id, username, email } = req.body
   const tampung = {
     id: id,
