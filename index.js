@@ -7,25 +7,12 @@ const productController = require('./src/controllers/product')
 const productRoute = require('./src/routes/product')
 const userRoute = require('./src/routes/user')
 const morgan = require('morgan')
-const cors = require('cors')
+const cors = require('cors');
 
 const PORT = 1234
 
 const app = express()
 
-// middleware
-// build in middleware to handle json
-// app.use(cors())
-// var whitelist = ['http://127.0.0.1:5500', 'http://example2.com']
-// var corsOptions = {
-//   origin: function (origin, callback) {
-//     if (whitelist.indexOf(origin) !== -1) {
-//       callback(null, true)
-//     } else {
-//       callback(new Error('Not allowed by CORS'))
-//     }
-//   }
-// }
 app.use(cors())
 app.use(express.json())
 // parse application/x-www-form-urlencoded
@@ -45,6 +32,19 @@ app.use('/products', productRoute)
 
 // handle url not found
 app.use(commonHelper.handleNotFount)
+
+
+// error handling
+
+app.use((err, req, res, next)=>{
+  const statusCode = err.status || 500
+  const message = err.message || 'Internal Server Error'
+  res.status(statusCode)
+  res.json({
+    status: statusCode,
+    message: message
+  })
+})
 
 app.listen(PORT, () => {
   console.log(`server starting on port ${PORT}`);

@@ -1,7 +1,8 @@
 const connection = require('../config/db')
-const getAllProduct = ()=>{
+const getAllProduct = ({search, sort, order})=>{
+
   return new Promise((resolve, reject)=>{
-    connection.query("SELECT * FROM products", (error, result) => {
+    connection.query(`SELECT * FROM products ORDER BY ?? ${order}`, sort, (error, result) => {
       console.log('jalan di baris 26');
       if (!error) {
         resolve(result)
