@@ -10,3 +10,14 @@ CREATE TABLE products (
   updated_at TIMESTAMP NULL,
   PRIMARY KEY (id)
 )
+
+CREATE TABLE users (
+  id VARCHAR(64) NOT NULL,
+  name VARCHAR(64) NULL,
+  email VARCHAR(64) NOT NULL,
+  password VARCHAR(64) NOT NULL,
+  photo VARCHAR(64) NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NULL,
+  PRIMARY KEY (id)
+)

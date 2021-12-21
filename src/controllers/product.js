@@ -61,8 +61,6 @@ const getAllProduct = async (req, res, next) => {
     });
     const resultCount = await modelProduct.countProduct();
     const { total } = resultCount[0];
-    console.log(total);
-    // const resultUser = await modelUser.getAllUser()
     commonHerper.response(res, resultProduct, 200, null, {
       currentPage: page,
       limit: limit,

@@ -16,6 +16,8 @@ app.use(express.json());
 // parse application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: false }));
 
+// app.use(commonMiddle.CallMe);
+
 app.use(commonMiddle.myConsole);
 // middleware login
 app.use(morgan('dev'));
@@ -34,11 +36,12 @@ app.use(commonHelper.handleNotFount);
 app.use((err, req, res, next) => {
   const statusCode = err.status || 500;
   const message = err.message || 'Internal Server Error';
-  res.status(statusCode);
-  res.json({
-    status: statusCode,
-    message: message
-  });
+  commonHelper.response(res, null, statusCode, message);
+  // res.status(statusCode);
+  // res.json({
+  //   status: statusCode,
+  //   message: message
+  // });
 });
 
 app.listen(PORT, () => {
