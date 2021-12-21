@@ -1,10 +1,10 @@
 const handleNotFount = (req, res, next) => {
-  res.status(404)
+  res.status(404);
   res.json({
     message: 'url not found'
-  })
-}
-const response = (res, result, status, error)=>{
+  });
+};
+const response = (res, result, status, message, pagination) => {
   // const resultPrint = {}
   // resultPrint.status = 'success'
   // resultPrint.statusCode = status
@@ -16,11 +16,12 @@ const response = (res, result, status, error)=>{
     status: 'Success',
     code: status || 200,
     data: result,
-    message: error || null
-  })
-}
+    message: message || null,
+    pagination: pagination
+  });
+};
 
 module.exports = {
   handleNotFount,
   response
-}
+};
