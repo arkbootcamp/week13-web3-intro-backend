@@ -3,18 +3,11 @@ const createError = require('http-errors');
 const commonHerper = require('../helpers/common');
 
 const insertProduct = (req, res, next) => {
-  const { name, description, price, stock } = req.body;
-  const data = {
-    name: name,
-    description: description,
-    price: price,
-    stock: stock
-  };
+  // const { name, description, price, stock } = req.body;
+  const data = req.body;
   modelProduct.insertProduct(data)
     .then((result) => {
-      res.json({
-        result: result
-      });
+      commonHerper.response(res, data, 201, 'data berhasil masuk datbase');
     })
     .catch((err) => {
       console.log(err);

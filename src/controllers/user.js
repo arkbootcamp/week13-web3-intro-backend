@@ -100,7 +100,11 @@ const deleteUser = (req, res, next) => {
   });
 };
 const getUser = (req, res, next) => {
+  const role = req.roleUser;
+  const aplikasiname = req.aplikasiName;
   res.json({
+    nameAplikasi: aplikasiname,
+    role: role,
     result: data
   });
 };

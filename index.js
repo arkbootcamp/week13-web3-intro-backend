@@ -19,12 +19,12 @@ app.use(express.urlencoded({ extended: false }));
 // app.use(commonMiddle.CallMe);
 
 app.use(commonMiddle.myConsole);
+// app.use(commonMiddle.CallMe);
 // middleware login
 app.use(morgan('dev'));
 
 // routes
 app.use('/users', userRoute);
-
 // method all kemudian di awali path /products
 app.use('/products', productRoute);
 
