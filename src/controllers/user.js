@@ -47,7 +47,7 @@ const login = async (req, res, next) => {
     const resultHash = await bcrypt.compare(password, user.password);
 
     if (resultHash) {
-      commonHelper.response(res, null, 200, 'anda berhasil login');
+      commonHelper.response(res, user, 200, 'anda berhasil login');
     } else {
       next(createError(403, 'email atau password anda salah'));
     }
