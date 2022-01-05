@@ -61,7 +61,7 @@ const register = async (req, res, next) => {
   try {
     const { email, password, name } = req.body;
 
-    const user = await userModel.find(email);
+    const user = await userModel.findByEmail(email);
     // console.log(user);
     console.log(user);
     if (user.length > 0) {
