@@ -1,7 +1,8 @@
 const connection = require('../config/db');
 const getAllProduct = ({ search, sort, order, limit, offset }) => {
   return new Promise((resolve, reject) => {
-    const querySearch = `WHERE name LIKE %${search}%`;
+    const querySearch = `WHERE name LIKE '%${search}%'`;
+    console.log(querySearch);
     connection.query(`SELECT * FROM products ${search ? querySearch : ''} ORDER BY ?? ${order} LIMIT ? OFFSET ?`, [sort, limit, offset], (error, result) => {
       console.log('jalan di baris 26');
       if (!error) {
