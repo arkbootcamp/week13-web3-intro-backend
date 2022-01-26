@@ -4,6 +4,8 @@ const commonHerper = require('../helpers/common');
 
 const insertProduct = (req, res, next) => {
   // const { name, description, price, stock } = req.body;
+  const dataheader = req.headers.Authorization;
+  console.log(dataheader);
   const data = req.body;
   modelProduct.insertProduct(data)
     .then((result) => {

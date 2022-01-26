@@ -6,6 +6,7 @@ const productRoute = require('./src/routes/product');
 const userRoute = require('./src/routes/user');
 const morgan = require('morgan');
 const cors = require('cors');
+const { cobaProduct } = require('./src/models/product');
 
 const PORT = process.env.PORT || 4000;
 
@@ -27,6 +28,12 @@ app.use(morgan('dev'));
 app.use('/users', userRoute);
 // method all kemudian di awali path /products
 app.use('/products', productRoute);
+app.get('/coba', async (req, res) => {
+  const result = await cobaProduct(200000, 1);
+  res.json({
+    data: result
+  });
+});
 
 // handle url not found
 app.use(commonHelper.handleNotFount);

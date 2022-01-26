@@ -3,6 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 const userModel = require('../models/user');
 const commonHelper = require('../helpers/common');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 let data = [
   // res.send("helo world 4")
   {
@@ -46,11 +47,20 @@ const login = async (req, res, next) => {
 
     const resultHash = await bcrypt.compare(password, user.password);
 
-    if (resultHash) {
-      commonHelper.response(res, user, 200, 'anda berhasil login');
-    } else {
-      next(createError(403, 'email atau password anda salah'));
-    }
+    if (!resultHash) return next(createError(403, 'email atau password anda salah'));
+    const secretKey = process.env.SECRET_KEY_JWT;
+    const payload = {
+      email: user.email,
+      name: user.name,
+      role: 'admin'
+    };
+    const verifyOptions = {
+      expiresIn: 60 * 60
+    };
+    const token = jwt.sign(payload, secretKey, verifyOptions);
+    user.token = token;
+
+    commonHelper.response(res, user, 200, 'anda berhasil login');
   } catch (error) {
     console.log(error);
     next(createError(500, new createError.InternalServerError()));
@@ -108,11 +118,18 @@ const getUser = (req, res, next) => {
     result: data
   });
 };
+const profile = async(req, res, next) => {
+  const email = req.email;
+  const users = await userModel.findByEmail(email);
+  console.log('data user', users);
+  commonHelper.response(res, users, 200);
+};
 
 module.exports = {
   insertUser: insertUser,
   deleteUser: deleteUser,
   getUser: getUser,
   register,
-  login
+  login,
+  profile
 };

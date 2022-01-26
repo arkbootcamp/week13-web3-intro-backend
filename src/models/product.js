@@ -72,11 +72,48 @@ const countProduct = () => {
     });
   });
 };
+const cobaProduct = (price, id) => {
+  return new Promise((resolve, reject) => {
+    connection.query('UPDATE products SET price = price - ? WHERE id = ?', [price, id], (error, result) => {
+      if (!error) {
+        resolve(result);
+      } else {
+        reject(error);
+      }
+    });
+  });
+};
+
+const createDeal = (data) => {
+  return new Promise((resolve, reject) => {
+    connection.query('INSERT INTO transaction SET ?', data, (error, result) => {
+      if (!error) {
+        connection.query('UPDATE wallet SET ballance = ballance - ?  WHERE id = ?', [data.amount, data.source_id], (error, result) => {
+          if (!error) {
+            connection.query('UPDATE wallet SET ballance = ballance + ? WHERE id = ?', [data.amount, data.detination_id], (error, result) => {
+              if (!error) {
+                resolve(result);
+              } else {
+                reject(error);
+              }
+            });
+          } else {
+            reject(error);
+          }
+        });
+      } else {
+        reject(error);
+      }
+    });
+  });
+};
 module.exports = {
   getAllProduct,
   insertProduct,
   updateProduct,
   deleteProduct,
   detailProduct,
-  countProduct
+  countProduct,
+  cobaProduct,
+  createDeal
 };
