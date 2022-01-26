@@ -3,10 +3,20 @@ const createError = require('http-errors');
 const commonHerper = require('../helpers/common');
 
 const insertProduct = (req, res, next) => {
-  // const { name, description, price, stock } = req.body;
-  const dataheader = req.headers.Authorization;
-  console.log(dataheader);
-  const data = req.body;
+  // console.log(req.get('host'));
+  const { name, description, price, stock } = req.body;
+  const fileName = req.file.filename;
+  // const dataheader = req.headers.Authorization;
+  // console.log(dataheader);
+  // const data = req.body;
+  const data = {
+    name,
+    description,
+    price,
+    stock,
+    photo: `http://${req.get('host')}/file/${fileName}`
+    // photo: `${process.env.BASE_URL}/file/${fileName}`
+  };
   modelProduct.insertProduct(data)
     .then((result) => {
       commonHerper.response(res, data, 201, 'data berhasil masuk datbase');

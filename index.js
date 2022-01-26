@@ -8,14 +8,14 @@ const morgan = require('morgan');
 const cors = require('cors');
 const { cobaProduct } = require('./src/models/product');
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 5000;
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 // parse application/x-www-form-urlencoded
-app.use(express.urlencoded({ extended: false }));
+// app.use(express.urlencoded({ extended: false }));
 
 // app.use(commonMiddle.CallMe);
 
@@ -34,7 +34,8 @@ app.get('/coba', async (req, res) => {
     data: result
   });
 });
-
+app.use('/file', express.static('./uploads'));
+app.use('/blabla', express.static('./coba'));
 // handle url not found
 app.use(commonHelper.handleNotFount);
 

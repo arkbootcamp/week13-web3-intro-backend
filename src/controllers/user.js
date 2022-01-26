@@ -52,7 +52,7 @@ const login = async (req, res, next) => {
     const payload = {
       email: user.email,
       name: user.name,
-      role: 'admin'
+      role: user.role
     };
     const verifyOptions = {
       expiresIn: 60 * 60
@@ -89,9 +89,11 @@ const register = async (req, res, next) => {
       id: uuidv4(),
       email,
       password: passwordHash,
-      name
+      name,
+      verified: 'no'
     };
     const resultInsert = await userModel.create(data);
+    commonHelper.sendEmail(email);
     commonHelper.response(res, resultInsert, 201, 'berhasil insert');
   } catch (error) {
     console.log(error);
@@ -118,7 +120,7 @@ const getUser = (req, res, next) => {
     result: data
   });
 };
-const profile = async(req, res, next) => {
+const profile = async (req, res, next) => {
   const email = req.email;
   const users = await userModel.findByEmail(email);
   console.log('data user', users);

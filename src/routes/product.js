@@ -1,15 +1,16 @@
 const express = require('express');
 const productController = require('../controllers/product');
-const { protect } = require('../middleware/auth');
-const commonMiddle = require('../middleware/common');
+const { protect, isAdmin } = require('../middleware/auth');
+// const commonMiddle = require('../middleware/common');
+const upload = require('../middleware/upload');
 
 const route = express.Router();
 
 route
-  .post('/', commonMiddle.validationInsert, productController.insertProduct)
+  .post('/', upload.single('photo'), productController.insertProduct)
   .get('/', protect, productController.getAllProduct)
-  .put('/:id', productController.updateProduct)
-  .delete('/:id', productController.deteleProduct)
-  .get('/:id', productController.detailProduct);
+  .put('/:id', protect, productController.updateProduct)
+  .delete('/:id', protect, isAdmin, productController.deteleProduct)
+  .get('/:id', protect, productController.detailProduct);
 
 module.exports = route;

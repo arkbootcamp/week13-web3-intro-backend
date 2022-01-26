@@ -20,7 +20,13 @@ const protect = (req, res, next) => {
     }
   }
 };
+const isAdmin = (req, res, next) => {
+  const role = req.role;
+  if (role !== 'admin') return next(createError(403, 'Access Denied!'));
+  next();
+};
 
 module.exports = {
-  protect
+  protect,
+  isAdmin
 };
