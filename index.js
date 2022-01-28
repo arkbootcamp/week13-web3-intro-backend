@@ -2,8 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const commonMiddle = require('./src/middleware/common');
 const commonHelper = require('./src/helpers/common');
-const productRoute = require('./src/routes/product');
-const userRoute = require('./src/routes/user');
+// const productRoute = require('./src/routes/product');
+// const userRoute = require('./src/routes/user');
+const route = require('./src/routes');
 const morgan = require('morgan');
 const cors = require('cors');
 const { cobaProduct } = require('./src/models/product');
@@ -25,9 +26,10 @@ app.use(commonMiddle.myConsole);
 app.use(morgan('dev'));
 
 // routes
-app.use('/users', userRoute);
+app.use('/v1', route);
+// app.use('/users', userRoute);
 // method all kemudian di awali path /products
-app.use('/products', productRoute);
+// app.use('/products', productRoute);
 app.get('/coba', async (req, res) => {
   const result = await cobaProduct(200000, 1);
   res.json({

@@ -45,15 +45,20 @@ const sendEmail = async (toEmail) => {
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Document</title>
-    </head>
-    <style>
+        <style>
         .wrapper{
-            width: 230px;
-            height: 120px;
-            background-color: blue;
+            width: 320px;
+            height: 200px;
+            background-color: lightblue;
             margin: 0 auto;
+            border-radius: 16px;
+        }
+        .wrapper h1{
+          color: lightcoral;
+          text-align: center;
         }
     </style>
+    </head>
     <body>
         <div class="wrapper">
             <h1>Selamat datang di aplikasi toko ku</h1>

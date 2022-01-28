@@ -1,6 +1,7 @@
 const modelProduct = require('../models/product');
 const createError = require('http-errors');
 const commonHerper = require('../helpers/common');
+const client = require('../config/redis');
 
 const insertProduct = (req, res, next) => {
   // console.log(req.get('host'));
@@ -66,6 +67,7 @@ const getAllProduct = async (req, res, next) => {
     });
     const resultCount = await modelProduct.countProduct();
     const { total } = resultCount[0];
+    client.setEx('product', 60 * 60, JSON.stringify(resultProduct));
     commonHerper.response(res, resultProduct, 200, null, {
       currentPage: page,
       limit: limit,
@@ -143,11 +145,12 @@ const detailProduct = async (req, res, next) => {
   try {
     const id = req.params.id;
     const result = await modelProduct.detailProduct(id);
+    await client.setEx(`product/${id}`, 60 * 60, JSON.stringify(result));
     res.json({
       status: 'Success',
       code: 200,
       data: result,
-      message: 'Data berhasil di tambahkan'
+      message: 'Data berhasil dari database'
     });
   } catch (error) {
     console.log(error);

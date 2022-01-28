@@ -7,9 +7,12 @@ const protect = (req, res, next) => {
   } else {
     return next(createError(403, 'Server Need Token'));
   }
+  const secretKey = process.env.SECRET_KEY_JWT;
+  const verifyOptions = {
+    issuer: 'Tokoku'
+  };
   try {
-    const secretKey = process.env.SECRET_KEY_JWT;
-    const decoded = jwt.verify(token, secretKey);
+    const decoded = jwt.verify(token, secretKey, verifyOptions);
     req.email = decoded.email;
     req.role = decoded.role;
     next();
